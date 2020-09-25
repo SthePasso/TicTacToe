@@ -1,0 +1,42 @@
+body {
+	background-color: Cyan;
+	text-align: center;
+	font-family: Comic Sans;
+	font-style:bold;
+	font-size: 1.3em;
+
+}
+
+h1{
+    position: relative;
+	color:Black;
+
+}
+
+input {
+	background-color:white;
+	font-size: 9vw;
+	width: 10vw;
+	height:10vw;
+	margin: 0;
+	color: white;
+    border-radius: 5px;
+
+}
+
+#jogador {
+	display: inline;
+}
+
+#reiniciar {
+	position: relative;
+	margin-top: 2%;
+	width: 12vw;
+	height:6vw;
+	font-size: 1em;
+	color: black;
+    border-radius: 5px;
+	font-family: Arial Black;
+	font-style:Bold;
+
+}
