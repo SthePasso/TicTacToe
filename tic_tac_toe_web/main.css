@@ -1,0 +1,131 @@
+.tile{
+	height: 150px;
+	width: 150px;
+	font-size: 60px;
+	font-family: Helvetica;
+
+	border-width: 0px;
+	background: #EAECF0;
+	border-radius: 5px;
+	box-shadow: -3px -3px 7px #ffffffb2, 3px 3px 5px rgba(94, 104, 121, 0.245);
+}
+
+.gameBoard{
+	display: none;
+}
+
+.center{
+	margin: 0 auto;
+}
+
+.container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	padding: 30px;
+	background: #EAECF0;
+	font-family: Helvetica;
+	color: #555;
+ }
+ 
+ 
+ .neumorphism-1 {
+	border-width: 0px;
+	
+	background: #EAECF0;
+	border-radius: 5px;
+	box-shadow: -3px -3px 7px #ffffffb2, 3px 3px 5px rgba(94, 104, 121, 0.245);
+ 
+ }
+
+/*height: 150px;
+width: 150px;*/
+
+.neumorphism-2 {
+  
+	height: 150px;
+	width: 150px;
+	background: #EAECF0;
+ 
+	border-radius: 5px;
+	box-shadow: inset -3px -3px 7px #ffffffff, inset 3px 3px 5px rgba(94, 104, 121, 0.245);
+}
+
+input{
+	border-width: 0px;
+ 
+	height: 30px;
+	background: #EDEEF4;
+ 
+	border-radius: 10px;
+	box-shadow: inset -3px -3px 7px #ffffffff, inset 3px 3px 5px rgba(94, 104, 121, 0.292); 
+ 
+	 outline: thin dotted;
+	 outline: 0px auto -webkit-focus-ring-color;
+	 outline-offset: 0px;
+ 
+ 
+}
+/* 
+ table {
+   font-family: roboto, sans-serif;
+   border-collapse: collapse;
+   width: 100%;
+ }
+ 
+ td {
+   color: #98A6BD;
+ 
+   text-align: center;
+   padding: 8px;
+ }
+ 
+ th {
+   color: #0082CA;
+   text-align: left;
+   padding: 8px;
+   border-bottom: 1px #0082CA solid;
+ 
+ }
+ 
+ tr:nth-child(even) {
+   background-color: #F5F6F9;
+ }
+ */
+ button:hover {
+	background: #EAECF0;
+	border-radius: 5px;
+	box-shadow: inset -3px -3px 7px #ffffffff, inset 3px 3px 5px rgba(94, 104, 121, 0.292);
+	color: #0082CA;
+ }
+ 
+ button:focus {
+	background: #EAECF0;
+	border-radius: 5px;
+	box-shadow: inset -3px -3px 7px #ffffffff, inset 3px 3px 5px rgba(94, 104, 121, 0.292);
+		color: #0082CA;
+ 
+		 outline: thin dotted;
+	 outline: 0px auto -webkit-focus-ring-color;
+	 outline-offset: 0px;
+ 
+ }
+ 
+ button:active {
+	background: #EAECF0;
+	border-radius: 5px;
+	box-shadow: inset -3px -3px 7px #ffffffff, inset 3px 3px 5px rgba(94, 104, 121, 0.292);
+	color: #74C6FC;
+ 
+ }
+ .font_button{
+	 color: #98A6BD;
+	 font-size: 16px;
+ }
+ 
+ .inputBox{
+	 color: #98A6BD;
+	 font-size: 16px;
+	 font-family: arial;
+ }
