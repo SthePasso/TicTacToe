@@ -110,11 +110,6 @@
 
     */
     updateBoard(type, row, col, tile) {
-      if (!$(this).prop('disabled')) {
-        alert('Esta posição já foi escolhida!');
-        return;
-      }
-
       $(`#${tile}`).text(type).prop('disabled', true);
       this.board[row][col] = type;
       this.moves++;
