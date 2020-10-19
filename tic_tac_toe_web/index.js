@@ -5,10 +5,8 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
 let rooms = 0;
-
-//Persistencia de usuário
-
-
+var numUsers = 0;
+var listOfUsers = [];
 
 app.use(express.static('.'));
 
@@ -17,7 +15,21 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-
+    console.log('a user connected');
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+        //Quem ta online request
+      });
+    
+    socket.on('newPlayer', (data) => {
+        console.log(data.playerName);
+        numUsers += 1;
+        listOfUsers.push(data.playerName)
+        console.log('Number of users online: ' + numUsers);
+        console.log('Users online: ' + listOfUsers)
+        // persitir em um array o login
+        // incrementar a variavel de numUsers
+      });
     // Cria uma nova sala de jogo e notifica o joqgador que criou o jogo.
     socket.on('createGame', (data) => {
         socket.join(`room-${++rooms}`);

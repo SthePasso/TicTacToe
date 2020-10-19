@@ -1,14 +1,13 @@
 (function init() {
-  const P1 = 'X';
-  const P2 = 'O';
+  const P1 = "X";
+  const P2 = "O";
   let player;
   let game;
-  var name = '';
+  var name = "";
   //let venceu = false;
 
   // const socket = io.connect('http://tic-tac-toe-realtime.herokuapp.com'),
-  const socket = io.connect('http://localhost:5000');
-
+  var socket;
   class Player {
     constructor(name, type) {
       this.name = name;
@@ -20,7 +19,6 @@
     static get wins() {
       return [7, 56, 448, 73, 146, 292, 273, 84];
     }
-
 
     // Seta o bit da jogada feita pelo jogador.
     // tileValue é o Bitmask utilizado para setar a jogada feita.
@@ -35,8 +33,8 @@
     // Seta o currentTurn para o jogador da vez e modifica a interface pra mostrar o mesmo.
     setCurrentTurn(turn) {
       this.currentTurn = turn;
-      const message = turn ? 'Sua vez' : 'Aguardando oponente';
-      $('#turn').text(message);
+      const message = turn ? "Sua vez" : "Aguardando oponente";
+      $("#turn").text(message);
     }
 
     getPlayerName() {
@@ -63,15 +61,15 @@
     // Cria o "tabuleiro" do jogo lincando listeners aos botões.
     createGameBoard() {
       function tileClickHandler() {
-        const row = parseInt(this.id.split('_')[1][0], 10);
-        const col = parseInt(this.id.split('_')[1][1], 10);
+        const row = parseInt(this.id.split("_")[1][0], 10);
+        const col = parseInt(this.id.split("_")[1][1], 10);
         if (!player.getCurrentTurn() || !game) {
-          alert('Ainda não é a sua vez!');
+          alert("Ainda não é a sua vez!");
           return;
         }
 
-        if ($(this).prop('disabled') || !game) {
-          alert('Esta posição já foi escolhida!');
+        if ($(this).prop("disabled") || !game) {
+          alert("Esta posição já foi escolhida!");
           return;
         }
 
@@ -80,24 +78,24 @@
         game.updateBoard(player.getPlayerType(), row, col, this.id);
 
         player.setCurrentTurn(false);
-        player.updatePlaysArr(1 << ((row * 3) + col));
+        player.updatePlaysArr(1 << (row * 3 + col));
 
         game.checkWinner();
       }
 
       for (let i = 0; i < 3; i++) {
-        this.board.push(['', '', '']);
+        this.board.push(["", "", ""]);
         for (let j = 0; j < 3; j++) {
-          $(`#button_${i}${j}`).on('click', tileClickHandler);
+          $(`#button_${i}${j}`).on("click", tileClickHandler);
         }
       }
     }
 
     // Remove o menu inicial da tela, mostra o "tabuleiro" do jogo e dá as boas vindas ao jogador.
-    displayBoard(message) {  
-      $('.menu').css('display', 'none');
-      $('.gameBoard').css('display', 'block');
-      $('#userHello').html(message);
+    displayBoard(message) {
+      $(".menu").css("display", "none");
+      $(".gameBoard").css("display", "block");
+      $("#userHello").html(message);
       this.createGameBoard();
     }
 
@@ -111,15 +109,7 @@
 
     */
     updateBoard(type, row, col, tile) {
-<<<<<<< HEAD
-      /*if (!$(this).prop('disabled')) {
-        alert('Esta posição já foi escolhida!');
-        return;
-      }*/
-
-=======
->>>>>>> fcee8ace42a6739cf5e139506ac034c3058a2ffb
-      $(`#${tile}`).text(type).prop('disabled', true);
+      $(`#${tile}`).text(type).prop("disabled", true);
       this.board[row][col] = type;
       this.moves++;
     }
@@ -130,10 +120,10 @@
 
     // Envia uma atualização para que o oponente atualize a interface dos botões de sua tela.
     playTurn(tile) {
-      const clickedTile = $(tile).attr('id');
+      const clickedTile = $(tile).attr("id");
 
       // Emite uma atualização de evento para o outro jogador falado que o jogador atual já jogou seu turno.
-      socket.emit('playTurn', {
+      socket.emit("playTurn", {
         tile: clickedTile,
         room: this.getRoomId(),
       });
@@ -172,9 +162,9 @@
         }
       });
 
-      const tieMessage = 'Deu empate!';
+      const tieMessage = "Deu empate!";
       if (this.checkTie()) {
-        socket.emit('gameEnded', {
+        socket.emit("gameEnded", {
           room: this.getRoomId(),
           message: tieMessage,
         });
@@ -191,9 +181,9 @@
           venceu = true;
         }
       });
-      if (this.moves >= 9 & !venceu){
+      if ((this.moves >= 9) & !venceu) {
         return true;
-      }else{
+      } else {
         return false;
       }
     }
@@ -202,7 +192,7 @@
     // Envia essa mensagem por broadcast para fazer com que o oponente saiba também.
     announceWinner() {
       const message = `${player.getPlayerName()} venceu!`;
-      socket.emit('gameEnded', {
+      socket.emit("gameEnded", {
         room: this.getRoomId(),
         message,
       });
@@ -218,95 +208,97 @@
   }
 
   // Cria um novo jogo e emite o evento newGame.
-  $('#new').on('click', () => {
-    const name = $('#nameNew').val();
+  $("#new").on("click", () => {
+    const name = $("#nameNew").val();
     if (!name) {
-      alert('Por favor, escreva seu nome.');
+      alert("Por favor, escreva seu nome.");
       return;
     }
-    socket.emit('createGame', { name });
+    socket.emit("createGame", { name });
     player = new Player(name, P1);
   });
 
   // Coloca um jogador em um jogo existente através do roomId e emite o evento joinGame.
-  $('#join').on('click', () => {
-    const name = $('#nameJoin').val();
-    const roomID = $('#room').val();
+  $("#join").on("click", () => {
+    const name = $("#nameJoin").val();
+    const roomID = $("#room").val();
     if (!name || !roomID) {
-      alert('Por favor, escreva seu nome e ID da sala.');
+      alert("Por favor, escreva seu nome e ID da sala.");
       return;
     }
-    socket.emit('joinGame', { name, room: roomID });
+    socket.emit("joinGame", { name, room: roomID });
     player = new Player(name, P2);
   });
 
-  // Novo jogo criado pelo jogador atual. Atualiza a interface e cria uma nova variável Game.
-  socket.on('newGame', (data) => {
-    const message =
-      `Olá, ${data.name}. Por favor peça para o outro jogador digitar o ID da sala: 
+  //Hidden login
+  $("#newUser").on("click", () => {
+    //#id, .class
+
+    this.name = $("#nameNew").val();
+    $("#usuario").append(this.name);
+    $(".login").css("display", "none");
+    $(".menu").css("display", "block");
+    socket = io.connect("http://localhost:5000");
+    socket.emit("newPlayer", {
+      playerName: this.name,
+    });
+    // Novo jogo criado pelo jogador atual. Atualiza a interface e cria uma nova variável Game.
+    socket.on("newGame", (data) => {
+      const message = `Olá, ${data.name}. Por favor peça para o outro jogador digitar o ID da sala: 
       ${data.room}. Esperando pelo outro jogador...`;
 
-    // Create game for player 1
-    game = new Game(data.room);
-    game.displayBoard(message);
-  });
+      // Create game for player 1
+      game = new Game(data.room);
+      game.displayBoard(message);
+    });
 
-  /**
+    /**
     Se um jogador cria o jogo ele será P1(X) e tem o primeiro turno.
     Este evento é recebido quando o oponente se conecta à sala existente.
   */
-  socket.on('player1', (data) => {
-    const message = `Olá, ${player.getPlayerName()}`;
-    $('#userHello').html(message);
-    player.setCurrentTurn(true);
-  });
+    socket.on("player1", (data) => {
+      const message = `Olá, ${player.getPlayerName()}`;
+      $("#userHello").html(message);
+      player.setCurrentTurn(true);
+    });
 
-  /**
+    /**
     Quando o oponente se conecta à sala existente, ele se torna o P2(O). 
     Este evento é recebido quando P2 se conecta à sala com sucesso. 
   */
-  socket.on('player2', (data) => {
-    const message = `Olá, ${data.name}`;
+    socket.on("player2", (data) => {
+      const message = `Olá, ${data.name}`;
 
-    // Create game for player 2
-    game = new Game(data.room);
-    game.displayBoard(message);
-    player.setCurrentTurn(false);
-  });
+      // Create game for player 2
+      game = new Game(data.room);
+      game.displayBoard(message);
+      player.setCurrentTurn(false);
+    });
 
-  /**
+    /**
     Quando o oponente joga seu turno, atualiza a interface. 
     Permite-se que o jogador atual jogue. 
    */
-  socket.on('turnPlayed', (data) => {
-    const row = data.tile.split('_')[1][0];
-    const col = data.tile.split('_')[1][1];
-    const opponentType = player.getPlayerType() === P1 ? P2 : P1;
+    socket.on("turnPlayed", (data) => {
+      const row = data.tile.split("_")[1][0];
+      const col = data.tile.split("_")[1][1];
+      const opponentType = player.getPlayerType() === P1 ? P2 : P1;
 
-    game.updateBoard(opponentType, row, col, data.tile);
-    player.setCurrentTurn(true);
-  });
+      game.updateBoard(opponentType, row, col, data.tile);
+      player.setCurrentTurn(true);
+    });
 
-  // Se o outro jogador vencer, este evento é recebido. Notifica que o jogo terminou.
-  socket.on('gameEnd', (data) => {
-    game.endGame(data.message);
-    socket.leave(data.room);
-  });
+    // Se o outro jogador vencer, este evento é recebido. Notifica que o jogo terminou.
+    socket.on("gameEnd", (data) => {
+      game.endGame(data.message);
+      socket.leave(data.room);
+    });
 
-  /**
+    /**
     Encerra o jogo caso ocorrao evento de erro. 
 	 */
-  socket.on('err', (data) => {
-    game.endGame(data.message);
+    socket.on("err", (data) => {
+      game.endGame(data.message);
+    });
   });
-
-  //Hidden login
-  $('#newUser').on('click', () => {//#id, .class
-    //console.log($('#nameNew').val());
-    this.name = $('#nameNew').val();
-    $('#usuario').append(this.name);
-    $('.login').css('display', 'none');
-    $('.menu').css('display', 'block');
-  });
-
-}());
+})();
