@@ -11,21 +11,27 @@
 		<div>
 			
 			<title>JOGO DA VELHA</title>
-			<div class="menu">
+			<div class="login">
+				<h1>JOGO DA VELHA</h1>
+				<h3>Login</h3>
+				<input type="text" name="name" id="nameNew" placeholder="Digite o seu nome" required>
+				<button class="neumorphism-1 font_button" type="button" id="newUser">Fazer Login</button>
+			</div>
+			<div class="menu" style="display: none;">
 				<h1>JOGO DA VELHA</h1>
 				<h3>Como jogar:</h3>
 				<ol>
-					<li>Jogador 1: Crie um novo jogo colocando seu nome de usuário</li>
+					<li>Jogador 1: Crie um novo jogo colocando seu nome de usuário <b id="usuario"></b></li>
 					<li>Jogador 2: Crie seu nome de usuário e coloque o ID da sala que quer entrar.</li>
 					<li>Clique em entrar no jogo.</li>
 				</ol>
 				<h4>Criando um novo jogo</h4>
-				<input type="text" name="name" id="nameNew" placeholder="Digite o seu nome" required>
+				<!--<input type="text" name="name" id="nameNew" placeholder="Digite o seu nome" required>-->
 				<button class="neumorphism-1 font_button" type="button" id="new">Novo jogo</button>
 				
 				<br><br>
 				<h4>Entrando em um jogo existente</h4>
-				<input type="text" name="name" id="nameJoin" placeholder="Digite o seu nome" required>
+				<!--<input type="text" name="name" id="nameJoin" placeholder="Digite o seu nome" required>-->
 				<input type="text" name="room" id="room" placeholder="Digite o ID da sala" required>
 				<button class="neumorphism-1 font_button" type="button" id="join">Entar no jogo</button>
 			</div>

@@ -3,6 +3,7 @@
   const P2 = 'O';
   let player;
   let game;
+  var name = '';
   //let venceu = false;
 
   // const socket = io.connect('http://tic-tac-toe-realtime.herokuapp.com'),
@@ -93,7 +94,7 @@
     }
 
     // Remove o menu inicial da tela, mostra o "tabuleiro" do jogo e dá as boas vindas ao jogador.
-    displayBoard(message) {
+    displayBoard(message) {  
       $('.menu').css('display', 'none');
       $('.gameBoard').css('display', 'block');
       $('#userHello').html(message);
@@ -110,10 +111,10 @@
 
     */
     updateBoard(type, row, col, tile) {
-      if (!$(this).prop('disabled')) {
+      /*if (!$(this).prop('disabled')) {
         alert('Esta posição já foi escolhida!');
         return;
-      }
+      }*/
 
       $(`#${tile}`).text(type).prop('disabled', true);
       this.board[row][col] = type;
@@ -295,4 +296,14 @@
   socket.on('err', (data) => {
     game.endGame(data.message);
   });
+
+  //Hidden login
+  $('#newUser').on('click', () => {//#id, .class
+    //console.log($('#nameNew').val());
+    this.name = $('#nameNew').val();
+    $('#usuario').append(this.name);
+    $('.login').css('display', 'none');
+    $('.menu').css('display', 'block');
+  });
+
 }());

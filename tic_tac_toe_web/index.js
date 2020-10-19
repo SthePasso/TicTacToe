@@ -6,6 +6,10 @@ const io = require('socket.io')(server);
 
 let rooms = 0;
 
+//Persistencia de usuário
+
+
+
 app.use(express.static('.'));
 
 app.get('/', (req, res) => {
