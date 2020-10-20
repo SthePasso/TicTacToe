@@ -234,10 +234,10 @@
   //Hidden login
   $("#newUser").on("click", () => {
     //#id, .class
-
     this.name = $("#nameNew").val();
     $("#usuario").append(this.name);
     $(".login").css("display", "none");
+    $(".abas").css("display", "block");
     $(".menu").css("display", "block");
     socket = io.connect("http://localhost:5000");
     socket.emit("newPlayer", {

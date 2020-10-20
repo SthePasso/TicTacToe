@@ -10,7 +10,21 @@ var listOfUsers = [];
 
 app.use(express.static('.'));
 
+app.get('/.', (req, res) => {
+    res.sendFile(path.join(__dirname, 'login.html'));    
+});
+
+app.get('/menu', (req, res) => {
+    //console.log(req.query.name);
+    //this.name = req.query.name;
+    //("#usuario").append(this.name);
+    res.sendFile(path.join(__dirname, 'menu.html'));
+});
+
 app.get('/', (req, res) => {
+    //console.log(req.query.name);
+    //this.name = req.query.name;
+    //$("#usuario").append(this.name);
     res.sendFile(path.join(__dirname, 'game.html'));
 });
 
