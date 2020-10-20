@@ -26,35 +26,43 @@
 					<li>Clique em entrar no jogo.</li>
 				</ol>
 				<h4>Criando um novo jogo</h4>
-				<!--<input type="text" name="name" id="nameNew" placeholder="Digite o seu nome" required>-->
 				<button class="neumorphism-1 font_button" type="button" id="new">Novo jogo</button>
 				
 				<br><br>
 				<h4>Entrando em um jogo existente</h4>
-				<!--<input type="text" name="name" id="nameJoin" placeholder="Digite o seu nome" required>-->
 				<input type="text" name="room" id="room" placeholder="Digite o ID da sala" required>
 				<button class="neumorphism-1 font_button" type="button" id="join">Entar no jogo</button>
 			</div>
-			<div class="gameBoard" style="display: none;">
-				<h2 id="userHello"></h2>
-				<h3 id="turn"></h3>
-				<table class="center">
-					<tr>
-						<td><button class="tile" id="button_00" ></button></td>
-						<td><button class="tile" id="button_01"></button></td>
-						<td><button class="tile" id="button_02"></button></td>
-					</tr>
-					<tr>
-						<td><button class="tile" type="button" id="button_10"></button></td>
-						<td><button class="tile" type="button" id="button_11"></button></td>
-						<td><button class="tile" type="button" id="button_12"></button></td>
-					</tr>
-					<tr>
-						<td><button class="tile" type="button" id="button_20"></button></td>
-						<td><button class="tile" type="button" id="button_21"></button></td>
-						<td><button class="tile" type="button" id="button_22"></button></td>
-					</tr>
-				</table>
+			<div class="Abas" style="display: none;">
+				<button href="#item1" class="aba" type="button">Sala 1</button>
+				<button href="#item2" class="aba" type="button">+</button>
+				<!--Esse é para ser o conteudo da aba 1 mas não está mostrando-->
+				<!--<div class="items" id="item1">-->
+					<div class="gameBoard" style="display: none;">
+						<p style="margin:0;padding: 0;" id="userHello"><b id="turn"></b></p>
+						<p style="margin:0; padding: 0;" ><b id="turn"></b></p>
+						<table class="center"> <!--Tabuleiro de Jogo da Velha-->
+							<tr>
+								<td><button class="tile" id="button_00" ></button></td>
+								<td><button class="tile" id="button_01"></button></td>
+								<td><button class="tile" id="button_02"></button></td>
+							</tr>
+							<tr>
+								<td><button class="tile" type="button" id="button_10"></button></td>
+								<td><button class="tile" type="button" id="button_11"></button></td>
+								<td><button class="tile" type="button" id="button_12"></button></td>
+							</tr>
+							<tr>
+								<td><button class="tile" type="button" id="button_20"></button></td>
+								<td><button class="tile" type="button" id="button_21"></button></td>
+								<td><button class="tile" type="button" id="button_22"></button></td>
+							</tr>
+						</table>
+					</div>
+				<!--</div>-->
+				<!--Esse é para ser o conteudo da aba 2 mas não está mostrando-->
+				<div class="items" id="item1">Mais mais</div>
+				<!--fim das abas-->
 			</div>
 		</div>
 		<script src="node_modules/jquery/dist/jquery.min.js"></script>

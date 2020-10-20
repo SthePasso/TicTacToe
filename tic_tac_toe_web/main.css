@@ -10,9 +10,15 @@
 	box-shadow: -3px -3px 7px #ffffffb2, 3px 3px 5px rgba(94, 104, 121, 0.245);
 }
 
+html, body {
+	overflow: hidden;
+}
+
 .gameBoard{
 	display: none;
+	: 0.2rem;
 }
+
 
 .center{
 	margin: 0 auto;
@@ -23,7 +29,7 @@
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-	padding: 30px;
+	padding: 10px;
 	background: #EAECF0;
 	font-family: Helvetica;
 	color: #555;
@@ -129,3 +135,28 @@ input{
 	 font-size: 16px;
 	 font-family: arial;
  }
+
+.aba{
+	border-width: 0px;
+	
+	background: #EAECF0;
+	border-radius: 5px;
+	box-shadow: -3px -3px 7px #ffffffb2, 3px 3px 5px rgba(94, 104, 121, 0.245);
+	color: #98A6BD;
+	font-size: 16px;
+	margin-top: 10px;
+
+	justify-content: left;
+	align-items: left;
+}
+
+.Abas{
+	border-width: 0px;
+}
+ 
+.items {display: none;}
+.items:target {display: block;}
+.items:not(:target) {display: none;}
+.items:target {display: block;}
+
+/*https://www.w3.org/Style/Examples/007/target.pt_BR.html#tab1*/

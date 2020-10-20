@@ -94,6 +94,7 @@
     // Remove o menu inicial da tela, mostra o "tabuleiro" do jogo e dá as boas vindas ao jogador.
     displayBoard(message) {
       $(".menu").css("display", "none");
+      $(".Abas").css("display", "block");
       $(".gameBoard").css("display", "block");
       $("#userHello").html(message);
       this.createGameBoard();
