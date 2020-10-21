@@ -2,17 +2,19 @@
   "name": "tic-tac-toe",
   "version": "1.0.0",
   "description": "A realtime online multiplayer game.",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "nodemon app.js"
   },
   "author": "Ayush Gupta",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "bootstrap": "^4.5.3",
     "express": "^4.14.0",
     "jquery": "^3.1.1",
+    "popper.js": "^1.16.1",
     "skeleton": "^0.1.2",
     "skeleton-css": "^2.0.4",
     "socket.io": "^2.3.0"
