@@ -19,7 +19,7 @@
       <h1 style="text-align: center; font-size: 50px; padding-top: 50px">
         JOGO DA VELHA
       </h1>
-      <h3 style="text-align: center; font-size: 40px">Login</h3>
+      <h3 class="login" >Login</h3>
       <div class="containerLogin">
         <input class="centerLogin" type="text" name="name" id="inputNameUser" style="margin: 10px"
           placeholder="Digite o seu nome" required />
@@ -33,47 +33,37 @@
  
     <div id="tela-game-pai">
       
-      <div class="abas" style="display: none; position: relative; left: 30px">
-        <ul class="nav nav-tabs" id="abas" role="tablist">
+      <div class="abas" style="display: none; position: relative;  ">
+        <ul class="nav nav-tabs " id="abas" role="tablist" >
           <li class="nav-item" role="presentation">
-            <a class="button_aba" type="button" id="home-tab" data-toggle="tab" href="#menu" role="tab"
-              aria-controls="menu" aria-selected="true">Menu</a>
+            <button class="button_aba neumorphism-1 font_button" type="button" id="home-tab" data-toggle="tab" href="#menu" role="tab"
+              aria-controls="menu" aria-selected="true">Nova Partida</button>
           </li>
           <li class="nav-item" role="presentation">
-            <a class="button_aba" type="button" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
-              aria-controls="contact" aria-selected="false">Nova Partida +</a>
+            <button class="button_aba neumorphism-1 font_button" type="button"  data-toggle="tab" href="#contact" role="tab"
+              aria-controls="contact" aria-selected="false"  id="btnNewGame">+</button>
           </li>
         </ul>
         
-        <div class="tab-content" id="myTabContent">
-          <h1>JOGO DA VELHA</h1>
+        <div class="tab-content containerAbas" id="myTabContent">
+          <h3 class="title">JOGO DA VELHA</h3>
           <!--MENU INICIAR E JOGO-->
           <div class="tab-pane fade show active" id="menu" role="tabpanel" aria-labelledby="home-tab">
             <div class="menu" style="display: none">
               
-              <h3>Como jogar:</h3>
+              <h3 class="instrucoes">Agradescemos sua preferência <b id="usuario"></b></h3>
+              <h3 class="instrucoes">Como jogar:</h3>
               <ol>
-                <li>
-                  Jogador 1: Crie um novo jogo colocando seu nome de usuário
-                  <b id="usuario"></b>
-                </li>
-                <li>
-                  Jogador 2: Crie seu nome de usuário e coloque o ID da sala
-                  que quer entrar.
-                </li>
-                <li>Clique em entrar no jogo.</li>
+                <li>Jogador 1: Crie um jogo clicando no botão "Novo Jogo"</li>
+                <li>Jogador 2: Ou coloque o ID da sala que quer entrar e clique no botão "Entrar no Jogo".</li>
               </ol>
-              <h4>Criando um novo jogo</h4>
-              <button class="neumorphism-1 font_button" type="button" id="btnNewGame">
-                Novo jogo
-              </button>
+              <h3 class="instrucoes">Criando um novo jogo</h3>
+              <button class="neumorphism-1 font_button" type="button">Novo jogo</button>
 
               <br /><br />
-              <h4>Entrando em um jogo existente</h4>
+              <h3 class="instrucoes">Entrando em um jogo existente</h3>
               <input type="text" name="room" id="room" placeholder="Digite o ID da sala" required />
-              <button class="neumorphism-1 font_button" type="button" id="btnJoinGame">
-                Entar no jogo
-              </button>
+              <button class="neumorphism-1 font_button" type="button" id="btnJoinGame">Entrar no jogo</button>
             </div>
             <div class="gameBoard" style="display: none">
               <p style="margin: 0; padding: 0" id="userHello">
@@ -88,26 +78,14 @@
                   <td><button class="tile" id="button_02"></button></td>
                 </tr>
                 <tr>
-                  <td>
-                    <button class="tile" type="button" id="button_10"></button>
-                  </td>
-                  <td>
-                    <button class="tile" type="button" id="button_11"></button>
-                  </td>
-                  <td>
-                    <button class="tile" type="button" id="button_12"></button>
-                  </td>
+                  <td><button class="tile" type="button" id="button_10"></button></td>
+                  <td><button class="tile" type="button" id="button_11"></button></td>
+                  <td><button class="tile" type="button" id="button_12"></button></td>
                 </tr>
                 <tr>
-                  <td>
-                    <button class="tile" type="button" id="button_20"></button>
-                  </td>
-                  <td>
-                    <button class="tile" type="button" id="button_21"></button>
-                  </td>
-                  <td>
-                    <button class="tile" type="button" id="button_22"></button>
-                  </td>
+                  <td><button class="tile" type="button" id="button_20"></button></td>
+                  <td><button class="tile" type="button" id="button_21"></button></td>
+                  <td><button class="tile" type="button" id="button_22"></button></td>
                 </tr>
               </table>
             </div>
@@ -115,7 +93,7 @@
 
           <!--OUTROS PARA EXEMPLO DO DAS ABAS-->
           
-          <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+          <div class="tab-pane fade instrucoes" id="contact" role="tabpanel" aria-labelledby="contact-tab" >
             volta para o menu
           </div>
         </div>

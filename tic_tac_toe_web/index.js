@@ -3,6 +3,7 @@
   const P2 = "O";
   let player;
   let game;
+  //var novaPartida= 0;
   var name = "";
   //let venceu = false;
 
@@ -14,8 +15,10 @@
   }
 
   function newTab(){
+    //this.novaPartida+=1;
     var itens = $('#abas').get();
-    $('#abas').prepend('<li class="nav-item" role="presentation"><a class="button_aba" type="button" id="contact-tab" data-toggle="tab" href="#contact2" role="tab" aria-controls="contact" aria-selected="false">Nova Partid2a +</a> </li>');
+    $('#abas').prepend('<li class="nav-item" role="presentation"><button class="button_aba neumorphism-1 font_button" type="button" id="contact-tab" data-toggle="tab" href="#contact2" role="tab" aria-controls="contact" aria-selected="false">Nova Partida</button> </li>');
+    //ver uma forma do id ser dinamico tanto aqui quando a div de referencia
   }
   
   class Player {
@@ -240,12 +243,12 @@
   //Hidden login
   $("#btnNewUser").on("click", () => {
     //#id, .class
-    name = $("#inputNameUser").val();
-    if (!name) {
+    this.name = $("#inputNameUser").val();
+    if (!this.name) {
       alert("Por favor, escreva seu nome.");
       return;
     }
-    $("#usuario").append(name);
+    $("#usuario").append(this.name);
     $(".login").css("display", "none");
     $(".abas").css("display", "block");
     $(".menu").css("display", "block");
