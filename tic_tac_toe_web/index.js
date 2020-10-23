@@ -14,10 +14,12 @@
     player = new Player(name, P1);
   }
 
-  function newTab(){
+  function newTab(roomName){
     //this.novaPartida+=1;
     var itens = $('#abas').get();
-    $('#abas').prepend('<li class="nav-item" role="presentation"><button class="button_aba neumorphism-1 font_button" type="button" id="contact-tab" data-toggle="tab" href="#contact2" role="tab" aria-controls="contact" aria-selected="false">Nova Partida</button> </li>');
+    $('#abas').prepend('<li class="nav-item" role="presentation"><button class="button_aba neumorphism-1 font_button" type="button" id="contact-tab'+roomName+'" data-toggle="tab" href="#game'+roomName+'" role="tab" aria-controls="contact" aria-selected="false">'+roomName+'</button> </li>');
+    var itens = $('#game').get();
+    $('#game').prepend('<div class="gameBoard" id="game'+roomName+'"><p id="userHello"><b id="turn"></b></p><p style="margin: 0; padding: 0"><b id="turn"></b></p><table class="center"><!--Tabuleiro de Jogo da Velha--><tr><td><button class="tile" id="button_00"></button></td><td><button class="tile" id="button_01"></button></td><td><button class="tile" id="button_02"></button></td></tr><tr><td><button class="tile" type="button" id="button_10"></button></td><td><button class="tile" type="button" id="button_11"></button></td><td><button class="tile" type="button" id="button_12"></button></td></tr><tr><td><button class="tile" type="button" id="button_20"></button></td><td><button class="tile" type="button" id="button_21"></button></td><td><button class="tile" type="button" id="button_22"></button></td></tr></table></div>')
     //ver uma forma do id ser dinamico tanto aqui quando a div de referencia
   }
   
@@ -183,7 +185,7 @@
           message: tieMessage,
         });
         alert(tieMessage);
-        location.reload();
+        goToMenu();
       }
     }
 
@@ -211,31 +213,39 @@
         message,
       });
       alert(message);
-      location.reload();
+      goToMenu();
     }
 
     // Finaliza o jogo se o outro jogador ganhou.
     endGame(message) {
       alert(message);
-      location.reload();
+      goToMenu();
+    }
+
+    goToMenu(){
+      document.getElementById('menu');
     }
   }
 
   // Cria um novo jogo e emite o evento newGame.
   $("#btnNewGame").on("click", () => {
-    const name = $("#nameNew").val();
+    const name = this.name;//$("#nameNew").val();
+    //console.log(name);
     //var roomName = createRoomGame(name);
-    newTab();
+    socket.emit('createGame', { name });
+    player = new Player(name, P1);
+    //newTab(roomName);
   });
 
   // Coloca um jogador em um jogo existente através do roomId e emite o evento joinGame.
   $("#btnJoinGame").on("click", () => {
-    const name = $("#nameJoin").val();
+    const name = this.name;//$("#nameJoin").val();
     const roomID = $("#room").val();
     if (!name || !roomID) {
       alert("Por favor, escreva seu nome e ID da sala.");
       return;
     }
+    newTab(roomID);
     socket.emit("joinGame", { name, room: roomID });
     player = new Player(name, P2);
   });
@@ -258,8 +268,9 @@
     });
     // Novo jogo criado pelo jogador atual. Atualiza a interface e cria uma nova variável Game.
     socket.on("newGame", (data) => {
-      const message = `Olá, ${data.name}. Por favor peça para o outro jogador digitar o ID da sala: 
-      ${data.room}. Esperando pelo outro jogador...`;
+      newTab(data.room);
+      const message = `Olá, ${data.name}. Peça para o outro jogador digitar o ID da sala: 
+      ${data.room}.`;
 
       // Create game for player 1
       game = new Game(data.room);
