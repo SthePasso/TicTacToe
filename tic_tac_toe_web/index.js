@@ -18,8 +18,9 @@
     //this.novaPartida+=1;
     var itens = $('#abas').get();
     $('#abas').prepend('<li class="nav-item" role="presentation"><button class="button_aba neumorphism-1 font_button" type="button" id="contact-tab'+roomName+'" data-toggle="tab" href="#game'+roomName+'" role="tab" aria-controls="contact" aria-selected="false">'+roomName+'</button> </li>');
-    var itens = $('#game').get();
-    $('#game').prepend('<div class="tab-pane fade show active" id="game'+roomName+'" role="tabpanel" aria-labelledby="home-tab"><div class="gameBoard"><p id="userHello"><b id="turn"></b></p><p style="margin: 0; padding: 0"><b id="turn"></b></p><table class="center"><!--Tabuleiro de Jogo da Velha--><tr><td><button class="tile" id="button_00"></button></td><td><button class="tile" id="button_01"></button></td><td><button class="tile" id="button_02"></button></td></tr><tr><td><button class="tile" type="button" id="button_10"></button></td><td><button class="tile" type="button" id="button_11"></button></td><td><button class="tile" type="button" id="button_12"></button></td></tr><tr><td><button class="tile" type="button" id="button_20"></button></td><td><button class="tile" type="button" id="button_21"></button></td><td><button class="tile" type="button" id="button_22"></button></td></tr></table></div></div>')
+    var itens = $('#myTabContent').get();
+    $('#myTabContent').prepend('<div class="tab-pane fade show active" id="game'+roomName+'" role="tabpanel" aria-labelledby="home-tab"><div><p id="userHello"><b id="turn"></b></p><p style="margin: 0; padding: 0"><b id="turn"></b></p><table class="center"><!--Tabuleiro de Jogo da Velha--><tr><td><button class="tile" id="button_00"></button></td><td><button class="tile" id="button_01"></button></td><td><button class="tile" id="button_02"></button></td></tr><tr><td><button class="tile" type="button" id="button_10"></button></td><td><button class="tile" type="button" id="button_11"></button></td><td><button class="tile" type="button" id="button_12"></button></td></tr><tr><td><button class="tile" type="button" id="button_20"></button></td><td><button class="tile" type="button" id="button_21"></button></td><td><button class="tile" type="button" id="button_22"></button></td></tr></table></div></div>')
+    console.log("Criando"+roomName);
     //ver uma forma do id ser dinamico tanto aqui quando a div de referencia
   }
   
@@ -108,9 +109,9 @@
 
     // Remove o menu inicial da tela, mostra o "tabuleiro" do jogo e dá as boas vindas ao jogador.
     displayBoard(message) {
-      $(".menu").css("display", "none");
-      $(".Abas").css("display", "block");
-      $(".gameBoard").css("display", "block");
+      //$(".menu").css("display", "none");
+      //$(".Abas").css("display", "block");
+      //$(".gameBoard").css("display", "block");
       $("#userHello").html(message);
       this.createGameBoard();
     }
@@ -259,19 +260,21 @@
       return;
     }
     $("#usuario").append(this.name);
-    $(".login").css("display", "none");
-    $(".abas").css("display", "block");
-    $(".menu").css("display", "block");
+    //$(".login").css("display", "none");
+    //$(".abas").css("display", "block");
+    //$(".menu").css("display", "block");
+    $("#tela-login").addClass("d-none");
+    $("#tela-game-pai").removeClass("d-none");
     socket = io.connect("http://localhost:5000");
     socket.emit("newPlayer", {
       playerName: this.name,
     });
+
     // Novo jogo criado pelo jogador atual. Atualiza a interface e cria uma nova variável Game.
     socket.on("newGame", (data) => {
       newTab(data.room);
       const message = `Olá, ${data.name}. Peça para o outro jogador digitar o ID da sala: 
       ${data.room}.`;
-
       // Create game for player 1
       game = new Game(data.room);
       game.displayBoard(message);
