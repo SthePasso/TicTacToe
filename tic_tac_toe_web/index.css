@@ -16,7 +16,7 @@ html, body {
 }
 
 .gameBoard{
-	display: none;
+	/*display: none;*/
 	text-align: center;
 	font-size: 20px;
 }

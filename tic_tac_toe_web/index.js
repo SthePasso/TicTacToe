@@ -2,7 +2,10 @@
   const P1 = "X";
   const P2 = "O";
   let player;
-  let game;
+  let gameUnitariun;
+  //let game;
+  //var player = [];
+  var game = [];
   //var novaPartida= 0;
   var name = "";
   //let venceu = false;
@@ -68,52 +71,64 @@
 
   // metodo contrutor da sala na qual o jogo está rodando no servidor.
   class Game {
+    roomId;
+    board;
+    moves;
     constructor(roomId) {
       this.roomId = roomId;
       this.board = [];
       this.moves = 0;
     }
 
-    // Cria o "tabuleiro" do jogo lincando listeners aos botões.
-    createGameBoard() {
-      function tileClickHandler() {
-        const row = parseInt(this.id.split("_")[1][0], 10);
-        const col = parseInt(this.id.split("_")[1][1], 10);
-        if (!player.getCurrentTurn() || !game) {
-          alert("Ainda não é a sua vez!");
-          return;
-        }
-
-        if ($(this).prop("disabled") || !game) {
-          alert("Esta posição já foi escolhida!");
-          return;
-        }
-
-        // Atualiza o "tabuleiro" depois de um turno jogado.
-        game.playTurn(this);
-        game.updateBoard(player.getPlayerType(), row, col, this.id);
-
-        player.setCurrentTurn(false);
-        player.updatePlaysArr(1 << (row * 3 + col));
-
-        game.checkWinner();
-      }
-
+  // Cria o "tabuleiro" do jogo lincando listeners aos botões.
+    
+  
+    createGameBoard(roomId) {
+      this.roomId = roomId;
       for (let i = 0; i < 3; i++) {
         this.board.push(["", "", ""]);
         for (let j = 0; j < 3; j++) {
-          $(`#button_${i}${j}`).on("click", tileClickHandler);
+          $(`#button_${i}${j}`).on("click", function() {
+            //Verificar qual o room
+            var i = 0;// = Number(roomId.replace('room-',''));//, j = 0;
+            console.log("this.roomId: "+this.getRoomId);
+            while(game[i].roomId != roomId || (i > game.length)) {
+              i = i+1;
+            }if(i > game.length) { return -1;}//??
+            console.log("compara2: "+roomId+" com "+game[i].roomId);
+      
+      
+            const row = parseInt(this.id.split("_")[1][0], 10);
+            const col = parseInt(this.id.split("_")[1][1], 10);
+            if (!player.getCurrentTurn() || !game[i]) {
+              alert("Ainda não é a sua vez!");
+              return;
+            }
+            if ($(this).prop("disabled") || !game[i]) {
+              alert("Esta posição já foi escolhida!");
+              return;
+            }
+      
+            // Atualiza o "tabuleiro" depois de um turno jogado.
+            game[i].playTurn(this);
+            game[i].updateBoard(player.getPlayerType(), row, col, this.id);
+      
+            player.setCurrentTurn(false);
+            player.updatePlaysArr(1 << (row * 3 + col));
+      
+            game[i].checkWinner();
+          });
         }
       }
     }
 
     // Remove o menu inicial da tela, mostra o "tabuleiro" do jogo e dá as boas vindas ao jogador.
-    displayBoard(message) {
+    displayBoard(message, roomId) {
       //$(".menu").css("display", "none");
       //$(".Abas").css("display", "block");
       //$(".gameBoard").css("display", "block");
       $("#userHello").html(message);
-      this.createGameBoard();
+      this.createGameBoard(roomId);
     }
 
     /**
@@ -170,6 +185,14 @@
      *  Esses numeros estão no array Player.wins e para o jogador atual
      *  e essa infrmação é guardada em playsArr.
      */
+    goToMenu(message){
+      if(confirm(message)){
+        $('#menu-tab').tab('show');
+      } else{
+        this.goToMenu(message);
+      }
+    }
+    
     checkWinner() {
       const currentPlayerPositions = player.getPlaysArr();
 
@@ -185,14 +208,14 @@
           room: this.getRoomId(),
           message: tieMessage,
         });
-        alert(tieMessage);
-        goToMenu();
+        //confirm(tieMessage);
+        this.goToMenu(tieMessage);
       }
     }
 
     checkTie() {
       const currentPlayerPositions = player.getPlaysArr();
-      const venceu = false;
+      var venceu = false;
       Player.wins.forEach((winningPosition) => {
         if ((winningPosition & currentPlayerPositions) === winningPosition) {
           venceu = true;
@@ -205,6 +228,14 @@
       }
     }
 
+    checkRoom(roomId){
+      var i = 0;//, j = 0;
+      while(game[i].roomId != roomId || (i > game.length)) {
+        i = i+1;
+      }
+      return i;
+    }
+
     // Anuncia o vencedor se o jogador atual ganhou.
     // Envia essa mensagem por broadcast para fazer com que o oponente saiba também.
     announceWinner() {
@@ -213,18 +244,14 @@
         room: this.getRoomId(),
         message,
       });
-      alert(message);
-      goToMenu();
+      //alert(message);
+      this.goToMenu(message);
     }
 
     // Finaliza o jogo se o outro jogador ganhou.
     endGame(message) {
-      alert(message);
-      goToMenu();
-    }
-
-    goToMenu(){
-      document.getElementById('menu');
+      //alert(message);
+      this.goToMenu(message);
     }
   }
 
@@ -276,8 +303,11 @@
       const message = `Olá, ${data.name}. Peça para o outro jogador digitar o ID da sala: 
       ${data.room}.`;
       // Create game for player 1
-      game = new Game(data.room);
-      game.displayBoard(message);
+      gameUnitariun = new Game(data.room);
+      game.push(gameUnitariun);
+      //console.log( game[game.length-1]);
+      console.log("newgame: "+data.room);
+      game[game.length-1].displayBoard(message, data.room);
     });
 
     /**
@@ -298,8 +328,10 @@
       const message = `Olá, ${data.name}`;
 
       // Create game for player 2
-      game = new Game(data.room);
-      game.displayBoard(message);
+      gameUnitariun = new Game(data.room);
+      //let i = data.room.replace('room-','');
+      console.log("player2: "+data.room);
+      gameUnitariun.displayBoard(message, data.room);
       player.setCurrentTurn(false);
     });
 
@@ -311,8 +343,9 @@
       const row = data.tile.split("_")[1][0];
       const col = data.tile.split("_")[1][1];
       const opponentType = player.getPlayerType() === P1 ? P2 : P1;
-
-      game.updateBoard(opponentType, row, col, data.tile);
+      //let i = data.room.replace('room-','');
+      //console.log(i);
+      gameUnitariun.updateBoard(opponentType, row, col, data.tile);
       player.setCurrentTurn(true);
     });
 
