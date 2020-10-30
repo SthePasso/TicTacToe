@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const { type } = require("jquery");
 const app = express();
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
@@ -9,10 +10,8 @@ server.listen(process.env.PORT || 5000);
 
 //Variaveis globais
 
-let rooms = 0;
-var numUsers = 0;
-var listOfUsers = [];
-
+var games = [];
+var users = [];
 //
 
 app.use(express.static("."));
@@ -37,48 +36,64 @@ app.get("/.", (req, res) => {
 // Definições da API Socket
 io.on("connection", (socket) => {
   console.log("a user connected");
+
   socket.on("disconnect", () => {
     console.log("user disconnected");
-    //Quem ta online request
   });
 
-  socket.on("newPlayer", (data) => {
-    console.log(data.playerName);
-    numUsers += 1;
-    listOfUsers.push(data.playerName);
-    console.log("Number of users online: " + numUsers);
-    console.log("Users online: " + listOfUsers);
-    // persitir em um array o login
-    // incrementar a variavel de numUsers
-  });
-  // Cria uma nova sala de jogo e notifica o joqgador que criou o jogo.
-  socket.on("createGame", (data) => {
-    socket.join(`room-${++rooms}`);
-    socket.emit("newGame", { name: data.name, room: `room-${rooms}` });
+  socket.on("newplayer", (data) => {
+    console.log("newplayer: " + data.player_name);
+    users.push(data.player_name);
+    console.log("Users online: " + users);
   });
 
-  // Conecta o Jogador 2 na sala que ele requisitou através do ID. Se a sala estiver cheia, mostra um erro.
-  socket.on("joinGame", function (data) {
-    var room = io.nsps["/"].adapter.rooms[data.room];
-    if (room && room.length === 1) {
-      socket.join(data.room);
-      socket.broadcast.to(data.room).emit("player1", {});
-      socket.emit("player2", { name: data.name, room: data.room });
+  socket.on("creategame", (data) => {
+    var game = {
+      p1: data.player_name,
+      p2: undefined,
+      id: games.length,
+      board: [['', '', ''], ['', '', ''], ['', '', '']],
+      moves: 0,
+      turn: data.player_name,
+      end: false
+    }
+    games.push(game);
+    io.emit("newgame", {
+      game: game,
+      player_name: data.player_name
+    });
+  });
+
+  socket.on("joingame", function (data) {
+    if (games.length > 0 && games[data.id].p1 !== undefined && games[data.id].p2 !== undefined) {
+      io.emit('joingame', {
+        game: games[data.id],
+        player_name: data.player_name
+      });
+    } else if (games.length > 0 && games[data.id].p2 == undefined) {
+      games[data.id].p2 = data.player_name;
+      games[data.id].turn = games[data.id].turn === undefined ? games[data.id].p2 : games[data.id].p1;
+      io.emit("player2_ok", {
+        player2_name: data.player_name,
+        game: games[data.id]
+      });
     } else {
-      socket.emit("err", { message: "Desculpe, esta sala esta cheia!" });
+      io.emit("err", {
+        message: "Desculpe, esta sala esta cheia ou não existe!"
+      });
     }
   });
 
   // Lida com o turno que foi jogado por um jogador e notifica o outro.
-  socket.on("playTurn", (data) => {
-    socket.broadcast.to(data.room).emit("turnPlayed", {
-      tile: data.tile,
-      room: data.room,
-    });
+  socket.on("move", (data) => {
+    data.game.turn = data.game.turn == data.game.p1 ? data.game.p2 : data.game.p1;
+    games[data.game.id] = data.game;
+    io.emit("move", data);
   });
 
   // Notifica os jogadores sobre quem ganhou.
-  socket.on("gameEnded", (data) => {
-    socket.broadcast.to(data.room).emit("gameEnd", data);
+  socket.on("gameover", (data) => {
+    game = data.game;
+    socket.broadcast.emit("gameover", data);  
   });
 });
