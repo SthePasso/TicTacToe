@@ -15,6 +15,38 @@ html, body {
 	overflow: auto;
 }
 
+.resize {
+	width: 150px;
+	height: auto;
+}
+
+.antipasto {
+	font-family: 'Antipasto' !important; 
+}
+
+.grande-titulo {
+	font-size: 70px !important;
+}
+
+.box-titulo {
+	margin-top: 70px;
+}
+
+.box-login {
+	margin-top: 9%;
+}
+
+.login-input {
+	margin-top: 11px;
+	width: 261px;
+}
+
+input[type="text"] {
+	font-family: system-ui;
+	font-size: 14px;
+	font-style: italic;
+}
+
 .gameBoard{
 	/*display: none;*/
 	text-align: center;
@@ -35,6 +67,15 @@ html, body {
 	left: 50%;
 	-ms-transform: translate(-50%, -50%);
 	transform: translate(-50%, -50%);
+}
+
+.title {
+	margin: 0;
+	text-align: justify;
+	font-size: 40px;
+	color: #607D8B;
+	font-family: monospace;
+	padding-bottom: 5px;	
 }
 
 .logo{
@@ -85,10 +126,30 @@ html, body {
 
 .instrucoes{
 	text-align: justify; 
-	font-size: 25px;
+	font-size: 20px;
 	font-family: Helvetica;
-
+	margin: 0 170px;
 }
+
+.espaco-titulo {
+	margin-top: 25px !important;
+}
+
+.how-to-play {
+	font-size: 30px;
+	margin-top: 19px;
+}
+
+.topo-jogo {
+	margin-top: 15px;
+}
+
+.rules {
+	padding-left: 36px;
+	margin-top: 10px !important;
+}
+
+
 .containerAbas{
 	padding-top: 0%;
 	padding-left: 0%;
@@ -208,12 +269,6 @@ input{
 }
 
 .abas{
-	border-width: 0px;
-	position:fixed;
-	left:0;
-	top:0
-	
-
 	border-width: 0px;
 	background: #EAECF0;
 	border-radius: 5px;

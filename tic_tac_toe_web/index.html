@@ -4,6 +4,10 @@
 <head>
   <link rel="stylesheet" href="index.css" />
   <style>
+	@font-face {
+	    font-family: "Antipasto";
+	    src: url("./Antipasto-Pro-ExtraBold-trial.ttf");
+	}
     @import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900&display=swap");
   </style>
   <link rel="stylesheet" href="node_modules/skeleton-css/css/skeleton.css" />
@@ -16,24 +20,28 @@
   <div class="container-fluid">
     
     <div id="tela-login" class="login font_button">
-      <h1 style="text-align: center; font-size: 50px; padding-top: 50px">
-        JOGO DA VELHA
-      </h1>
-      <h3 class="login" >Login</h3>
-      <div class="containerLogin">
-        <input class="centerLogin" type="text" name="name" id="inputNameUser" style="margin: 10px"
-          placeholder="Digite o seu nome" required />
-        <div class="centerButton">
-          <button class="neumorphism-1 font_button" style="margin: 10px" id="btnNewUser">
-            Fazer Login
-          </button>
-        </div>
-      </div>
+	    <div class="box-titulo">
+		<img class="resize" src="tictactoe-removebg.png"/>
+		<span class="title grande-titulo antipasto">Jogo da Velha</span>
+     		<img class="resize" src="tictactoe-removebg.png"/>
+	    </div>
+	    <div class="box-login">
+		<h3 class="login" >Login</h3>
+		<div class="">
+			<input class="login-input" type="text" name="name" id="inputNameUser" style="margin: 10px"
+          		placeholder="Digite o seu nome" required />
+        		<span class="">
+          			<button class="neumorphism-1 font_button" style="margin: 10px" id="btnNewUser">
+            				Fazer Login
+          			</button>
+			</span>
+		</div>
+	    </div>
     </div>
  
     <div id="tela-game-pai" class="d-none">
       
-      <div class="abas">
+      <div class="abas login">
         <ul class="nav nav-tabs " id="abas" role="tablist" >
           <!--<li class="nav-item" role="presentation">
             <button class="button_aba neumorphism-1 font_button" type="button" id="home-tab" data-toggle="tab" href="#menu" role="tab"
@@ -45,26 +53,32 @@
           </li>
         </ul>
         
-        <div class="tab-content containerAbas " id="myTabContent">
+        <div class="tab-content login" id="myTabContent">
           
           <!--MENU INICIAR E JOGO-->
           <div class="tab-pane fade show active" id="menu" role="tabpanel" aria-labelledby="home-tab">
-            <div class="menu containerMenu">
-              <h3 class="logo ">JOGO DA VELHA</h3>
-              <h3 class="instrucoes">Agradecemos sua preferência <b id="usuario"></b></h3>
-              <h3 class="instrucoes">Como jogar:</h3>
-              <ol>
+            <div class="menu">
+		    <div class="topo-jogo">
+			    <img class="resize" src="tictactoe-removebg.png"/>
+			    <span class="title grande-titulo antipasto">Jogo da Velha</span>
+			    <img class="resize" src="tictactoe-removebg.png"/>
+		    </div>
+		    <h3 class="instrucoes espaco-titulo">Agradecemos sua preferência <b id="usuario"></b></h3>
+		    <h3 class="instrucoes how-to-play">Como jogar:</h3>
+              <ol class="instrucoes rules">
                 <li>Jogador 1: Crie um jogo clicando no botão "Novo Jogo"</li>
                 <li>Jogador 2: Ou coloque o ID da sala que quer entrar e clique no botão "Entrar no Jogo".</li>
               </ol>
-              <h3 class="instrucoes">Criando um novo jogo</h3>
-              <button class="neumorphism-1 font_button" type="button" id="btnNewGame">Novo jogo</button>
-
-              <br /><br />
-              <h3 class="instrucoes">Entrando em um jogo existente</h3>
-              <input type="text" name="room" id="room" placeholder="Digite o ID da sala" required />
-              <button class="neumorphism-1 font_button" type="button" id="btnJoinGame">Entrar no jogo</button>
-            </div>
+              <h3 class="instrucoes">Criando um novo jogo:</h3>
+	      <div class="instrucoes">
+		      <button class="neumorphism-1 font_button" type="button" id="btnNewGame">Novo jogo</button>
+	      </div>
+	      <h3 class="instrucoes">Entrando em um jogo existente:</h3>
+	      <div class="instrucoes">
+		      <input type="text" name="room" id="room" placeholder="Digite o ID da sala" required />
+		      <button class="neumorphism-1 font_button" type="button" id="btnJoinGame">Entrar no jogo</button>
+	      </div>
+	     </div>
           </div>
           <!--MENU INICIAR E JOGO-->
           
