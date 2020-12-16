@@ -60,17 +60,22 @@ io.on("connection", (socket) => {
     games.push(game);
     io.emit("newgame", {
       game: game,
-      player_name: data.player_name
+      player_name: data.player_name,
+      player_oponents: users.filter(function(value, index, arr){ 
+        return value != data.player_name;
+      })
     });
   });
 
   socket.on("joingame", function (data) {
+    console.log("Join Game", data);
     if (games.length > 0 && games[data.id].p1 !== undefined && games[data.id].p2 !== undefined) {
       io.emit('joingame', {
         game: games[data.id],
         player_name: data.player_name
       });
     } else if (games.length > 0 && games[data.id].p2 == undefined) {
+      console.log("entrou no else");
       games[data.id].p2 = data.player_name;
       games[data.id].turn = games[data.id].turn === undefined ? games[data.id].p2 : games[data.id].p1;
       io.emit("player2_ok", {
@@ -89,6 +94,11 @@ io.on("connection", (socket) => {
     data.game.turn = data.game.turn == data.game.p1 ? data.game.p2 : data.game.p1;
     games[data.game.id] = data.game;
     io.emit("move", data);
+  });
+
+  //Recebe convide de um playes
+  socket.on("invitation", (data) => {
+    socket.broadcast.emit("invitation", data);
   });
 
   // Notifica os jogadores sobre quem ganhou.

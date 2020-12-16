@@ -114,7 +114,12 @@ input[type="text"] {
 	max-width: 100%;
 	min-width: 100%;
 }
- 
+.convite{
+	text-align: center; 
+	color: #98A6BD !important;
+	font-size: 12px;
+	font-weight: 400px !important;
+} 
 .login{
 	text-align: center; 
 	font-size: 40px;
@@ -279,8 +284,6 @@ input{
 	
 	justify-content: left;
 	align-items: left;
-
-	
 
 }
 

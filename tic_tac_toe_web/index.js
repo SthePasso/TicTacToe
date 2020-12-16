@@ -3,6 +3,7 @@
   var player_name;
   var game;
   var gameId;
+  var invitation;
 
   function printMat() {
     console.log("imprimi mat");
@@ -21,6 +22,31 @@
         var coluna = linha[j].children.item(0);
         coluna.innerHTML = board[i][j];
       }
+    }
+  }
+
+  function invite(player_oponents){
+    var itens = $('#abas').get();
+    $('#abas').prepend(
+      '<li class="nav-item dropdown" role="presentation" id="inviteOponent" >'+
+        '<button class="button_aba neumorphism-1 font_button nav-link dropdown-toggle" type="button"  data-toggle="dropdown" role="tab" aria-controls="contact" aria-selected="false">Convite</button>'+
+        '<div class="dropdown-menu" id="oponents">'+
+        '</div>'+
+      '</li>'
+    )
+    for(var i=0; i<player_oponents.length; i++){
+      invitation = player_oponents[i];
+      $('#oponents').prepend(
+        '<button class="dropdown-item convite" id="oponet'+i+'">'+invitation+'</button>'
+      )
+      $("#oponet"+i).on("click", (e) => {
+        //alert("convite enviado")
+        socket.emit("invitation", {
+          player_oponent: player_name,
+          player_invite: invitation,
+          game: game,
+        });
+      })
     }
   }
 
@@ -209,9 +235,11 @@
 
   socket.on("newgame", (data) => {
     if (data.player_name === player_name) {
+      console.log("Oponents: ", data.player_oponents);
       game = data.game;
       gameId = data.game.id;
       newTab(game.id);
+      invite(data.player_oponents);
       var message = `Olá, ${player_name}. Peça para outro jogador digitar o ID da sala: ${game.id}.`;
       displayBoard(message);
     }
@@ -229,6 +257,7 @@
     if (data.game.id === gameId) {
       game = data.game;
       if (data.game.p1 === player_name) {
+        $("#inviteOponent").remove();
         var message = `Olá, ${player_name}`;
         $("#userHello").html(message);
       } else {
@@ -253,6 +282,18 @@
       console.log("Message 1");
       //alert(data.message);
       goToMenu(data.message, data.game.id);
+    }
+  });
+
+  socket.on("invitation", (data) => {
+    if(data.player_invite == player_name){
+      if(confirm(data.player_oponent+" te convidou para jogar. Aceitar partida?")){
+        gameId = data.game.id
+        socket.emit("joingame", {
+          player_name: player_name,
+          id: gameId
+        });
+      } 
     }
   });
 
