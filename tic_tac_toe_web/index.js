@@ -14,8 +14,9 @@
   }
 
   function updateBoard(game) {
+    console.log('update board'+game)
     var board = game.board;
-    var table = $('table').children().children();
+    var table = $('#tab'+game.id).children().children();
     for (var i = 0 ; i < game.board.length; i++) {
       var linha = table[i].children;
       for (var j = 0; j < game.board[i].length; j++) {
@@ -40,7 +41,6 @@
         '<button class="dropdown-item convite" id="oponet'+i+'">'+invitation+'</button>'
       )
       $("#oponet"+i).on("click", (e) => {
-        //alert("convite enviado")
         socket.emit("invitation", {
           player_oponent: player_name,
           player_invite: invitation,
@@ -50,7 +50,7 @@
     }
   }
 
-  function newTab(id){
+  function newTab(id, player_name){
     var itens = $('#abas').get();
     $('#abas').prepend(
       '<li class="nav-item" role="presentation">'+
@@ -58,6 +58,18 @@
           +id+
         '</button>'+ 
       '</li>');
+    $('#menu').hide();
+    $('#contact-tab_'+id).tab('show');
+    $('#contact-tab_'+id).on('click', (e) => {
+      console.log(e.currentTarget.id.split('_'));
+      gameId = parseInt(e.currentTarget.id.split('_')[1]);
+      console.log('joingame: clicou na aba ' + gameId);
+      socket.emit("joingame", {
+        player_name: player_name,
+        id: gameId
+      });
+    });
+
     var itens = $('#myTabContent').get();
     $('#myTabContent').prepend(
       '<div class="tab-pane fade show active" id="game'+id+'" role="tabpanel" aria-labelledby="home-tab">'+
@@ -68,38 +80,38 @@
           '<p style="margin: 0; padding: 0">'+
             '<b id="turn"></b>'+
           '</p>'+
-          '<table class="center"><!--Tabuleiro de Jogo da Velha-->'+
+          '<table class="center" id="tab'+id+'"><!--Tabuleiro de Jogo da Velha-->'+
             '<tr>'+
               '<td>'+
-                '<button class="tile" id="button_00"></button>'+
+                '<button class="tile game' + id + '" type="button" id="button_00"></button>'+
               '</td>'+
               '<td>'+
-                '<button class="tile" id="button_01"></button>'+
+                '<button class="tile game' + id + '" type="button" id="button_01"></button>'+
               '</td>'+
               '<td>'+
-                '<button class="tile" id="button_02"></button>'+
+                '<button class="tile game' + id + '" type="button" id="button_02"></button>'+
               '</td>'+
             '</tr>'+
             '<tr>'+
               '<td>'+
-                '<button class="tile" type="button" id="button_10"></button>'+
+                '<button class="tile game' + id + '" type="button" id="button_10"></button>'+
               '</td>'+
               '<td>'+
-                '<button class="tile" type="button" id="button_11"></button>'+
+                '<button class="tile game' + id + '" type="button" id="button_11"></button>'+
               '</td>'+
               '<td>'+
-                '<button class="tile" type="button" id="button_12"></button>'+
+                '<button class="tile game' + id + '" type="button" id="button_12"></button>'+
               '</td>'+
             '</tr>'+
             '<tr>'+
               '<td>'+
-                '<button class="tile" type="button" id="button_20"></button>'+
+                '<button class="tile game' + id + '" type="button" id="button_20"></button>'+
               '</td>'+
               '<td>'+
-                '<button class="tile" type="button" id="button_21"></button>'+
+                '<button class="tile game' + id + '" type="button" id="button_21"></button>'+
               '</td>'+
               '<td>'+
-                '<button class="tile" type="button" id="button_22"></button>'+
+                '<button class="tile game' + id + '" type="button" id="button_22"></button>'+
               '</td>'+
             '</tr>'+
           '</table>'+
@@ -107,16 +119,20 @@
       '</div>')
     $(".tile").on("click", (e) => {
       if (game.turn !== player_name || game.end ) {
+        alert("Não é sua vez de jogar, aguarde o outro jogador.")
         console.log("return");
         return;
       }
+      var gameClick = parseInt(e.currentTarget.classList[1][4])
       var row = parseInt(e.currentTarget.id.split("_")[1][0], 10);
       var col = parseInt(e.currentTarget.id.split("_")[1][1], 10);
-      e.currentTarget.innerHTML = game.board[row][col] = game.p1 === player_name ? 'X' : 'O';
-      game.moves++;
+      var x_o = e.currentTarget.innerHTML = game.p1 === player_name ? 'X' : 'O';
       socket.emit("move", {
         player_name: player_name,
-        game: game,
+        gameId: gameClick,
+        row,
+        col,
+        x_o
       });
     });
   }
@@ -163,10 +179,12 @@
   function checkWinner() {
     if (wins('X')) {
       announceWinner(game.p1);
+      $('#menu').show();
       return;
     }
     if (wins('O')) {
       announceWinner(game.p2);
+      $('#menu').show();
       return;
     }
 
@@ -224,21 +242,16 @@
     });
   });
 
-  $('.button_aba').on('click', (e) => {
-    if (e.currentTarget.id === 'menu-tab') return;
-    gameId = parseInt(e.currentTarget.id.split('_'));
-    socket.emit("joingame", {
-      player_name: name,
-      id: gameId
-    });
+  $('#menu-tab').on('click', (e) => {
+    $('#menu').show();
+    $('#menu').tab('show');
   });
 
   socket.on("newgame", (data) => {
     if (data.player_name === player_name) {
-      console.log("Oponents: ", data.player_oponents);
       game = data.game;
       gameId = data.game.id;
-      newTab(game.id);
+      newTab(game.id, player_name);
       invite(data.player_oponents);
       var message = `Olá, ${player_name}. Peça para outro jogador digitar o ID da sala: ${game.id}.`;
       displayBoard(message);
@@ -246,22 +259,29 @@
   });
 
   socket.on('joingame', (data) => {
+    console.log('joingame: jogador ' + data.player_name + 'entrou na partida ' + data.game.id);
     if (data.game.id === gameId && player_name === data.player_name) {
+      console.log('game: ' + gameId);
+      console.log(data.game.board[0]);
+      console.log(data.game.board[1]);
+      console.log(data.game.board[2]);
       game = data.game;
+      gameId = game.id;
+      updateBoard(game);
       $('#contact-tab_' + gameId).tab('show');
-      displayBoard(message);
     }
   });
 
   socket.on("player2_ok", (data) => {
     if (data.game.id === gameId) {
       game = data.game;
+      gameId = game.id;
       if (data.game.p1 === player_name) {
         $("#inviteOponent").remove();
         var message = `Olá, ${player_name}`;
         $("#userHello").html(message);
       } else {
-        newTab(game.id);
+        newTab(game.id, player_name);
         var message = `Olá, ${player_name}`;
         displayBoard(message);
       }
@@ -269,8 +289,9 @@
   });
 
   socket.on("move", (data) => {
-    if (data.game.id === game.id) {
+    if (data.game.id === gameId) {
       game = data.game;
+      gameId = game.id;
       updateBoard(data.game);
       checkWinner();
     }
@@ -279,6 +300,7 @@
   socket.on("gameover", (data) => {
     if (data.game.id === gameId) {
       game = data.game;
+      gameId = game.id;
       console.log("Message 1");
       //alert(data.message);
       goToMenu(data.message, data.game.id);
@@ -286,14 +308,38 @@
   });
 
   socket.on("invitation", (data) => {
+    var op = data.player_oponent
     if(data.player_invite == player_name){
+      console.log("Convite")
       if(confirm(data.player_oponent+" te convidou para jogar. Aceitar partida?")){
+        console.log("Convite")
         gameId = data.game.id
         socket.emit("joingame", {
           player_name: player_name,
           id: gameId
         });
-      } 
+      } else{
+        socket.emit("invitationNone", {
+          player_oponent: player_name,
+          player_invite: op,
+          message: "O(a) jogador(a) "+player_name+" não aceitou o seu convite",
+        });
+      }
+    }
+  });
+
+  socket.on("invitationNone",  (data) => {
+    console.log(data.player_invite)
+    console.log(player_name)
+    if(data.player_invite == player_name){
+      alert(data.message)
+    }
+  });
+
+  socket.on("ocupada", (data) => {
+    console.log("ocupada");
+    if(data.player_name == player_name){
+      alert(data.message);
     }
   });
 

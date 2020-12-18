@@ -68,14 +68,13 @@ io.on("connection", (socket) => {
   });
 
   socket.on("joingame", function (data) {
-    console.log("Join Game", data);
     if (games.length > 0 && games[data.id].p1 !== undefined && games[data.id].p2 !== undefined) {
+      console.log("entra no game e emite joingame", data);
       io.emit('joingame', {
         game: games[data.id],
         player_name: data.player_name
       });
     } else if (games.length > 0 && games[data.id].p2 == undefined) {
-      console.log("entrou no else");
       games[data.id].p2 = data.player_name;
       games[data.id].turn = games[data.id].turn === undefined ? games[data.id].p2 : games[data.id].p1;
       io.emit("player2_ok", {
@@ -91,14 +90,34 @@ io.on("connection", (socket) => {
 
   // Lida com o turno que foi jogado por um jogador e notifica o outro.
   socket.on("move", (data) => {
-    data.game.turn = data.game.turn == data.game.p1 ? data.game.p2 : data.game.p1;
-    games[data.game.id] = data.game;
-    io.emit("move", data);
+    if(games[data.gameId].board[data.row][data.col] == ''){
+      games[data.gameId].turn = games[data.gameId].turn == games[data.gameId].p1 ? games[data.gameId].p2 : games[data.gameId].p1;
+      games[data.gameId].moves++;
+      games[data.gameId].board[data.row][data.col] = data.x_o;
+      console.log('game: ' + data.gameId);
+      console.log(games[data.gameId].board[0]);
+      console.log(games[data.gameId].board[1]);
+      console.log(games[data.gameId].board[2]);
+      io.emit("move", {
+        game: games[data.gameId]
+      });
+    } /*else{
+      console.log("Esta posição já está ocupada, escolha outra.")
+      io.emit("ocupada", {
+        player_name: games[data.gameId].turn,
+        message: "Esta posição já está ocupada, escolha outra.",
+      });
+    }*/
   });
 
   //Recebe convide de um playes
   socket.on("invitation", (data) => {
     socket.broadcast.emit("invitation", data);
+  });
+
+  //Convite Negado
+  socket.on("invitationNone", (data) => {
+    socket.broadcast.emit("invitationNone", data);
   });
 
   // Notifica os jogadores sobre quem ganhou.
